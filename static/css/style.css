@@ -1,0 +1,349 @@
+/* Additional Emperor DevSupport VPS Manager Styles */
+
+/* Custom scrollbar */
+::-webkit-scrollbar {
+    width: 8px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--darker-bg);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--neon-green);
+    border-radius: 4px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--neon-blue);
+}
+
+/* Loading animations */
+.loading-spinner {
+    display: inline-block;
+    width: 20px;
+    height: 20px;
+    border: 3px solid rgba(0, 255, 65, 0.3);
+    border-radius: 50%;
+    border-top-color: var(--neon-green);
+    animation: spin 1s ease-in-out infinite;
+}
+
+@keyframes spin {
+    to { transform: rotate(360deg); }
+}
+
+/* Pulse animation for status indicators */
+.status-pulse {
+    animation: pulse 2s infinite;
+}
+
+@keyframes pulse {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+/* Glow effects */
+.glow-green {
+    box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
+}
+
+.glow-blue {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.5);
+}
+
+.glow-purple {
+    box-shadow: 0 0 20px rgba(188, 19, 254, 0.5);
+}
+
+/* Service status indicators */
+.service-status {
+    display: inline-block;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    margin-right: 8px;
+}
+
+.service-status.online {
+    background: var(--neon-green);
+    box-shadow: 0 0 10px var(--neon-green);
+}
+
+.service-status.offline {
+    background: #ff0040;
+    box-shadow: 0 0 10px #ff0040;
+}
+
+.service-status.warning {
+    background: #ffaa00;
+    box-shadow: 0 0 10px #ffaa00;
+}
+
+/* Terminal-style output */
+.terminal-output {
+    background: var(--darker-bg);
+    border: 1px solid var(--neon-green);
+    border-radius: 5px;
+    padding: 15px;
+    font-family: 'Courier New', monospace;
+    font-size: 14px;
+    color: var(--neon-green);
+    max-height: 300px;
+    overflow-y: auto;
+}
+
+.terminal-output .command {
+    color: var(--neon-blue);
+}
+
+.terminal-output .output {
+    color: var(--text-secondary);
+}
+
+.terminal-output .error {
+    color: #ff0040;
+}
+
+/* Dashboard widgets */
+.widget {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 20px;
+    transition: all 0.3s ease;
+}
+
+.widget:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(0, 255, 65, 0.1);
+}
+
+.widget-header {
+    display: flex;
+    justify-content: between;
+    align-items: center;
+    margin-bottom: 15px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid rgba(0, 255, 65, 0.2);
+}
+
+.widget-title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--neon-green);
+}
+
+.widget-icon {
+    font-size: 1.5rem;
+    color: var(--neon-blue);
+}
+
+/* Quick stats */
+.quick-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.quick-stat {
+    background: linear-gradient(135deg, var(--card-bg), rgba(0, 255, 65, 0.05));
+    border: 1px solid rgba(0, 255, 65, 0.3);
+    border-radius: 10px;
+    padding: 15px;
+    text-align: center;
+    transition: all 0.3s ease;
+}
+
+.quick-stat:hover {
+    transform: scale(1.02);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.2);
+}
+
+.quick-stat-value {
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--neon-green);
+    margin-bottom: 5px;
+}
+
+.quick-stat-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+/* Service cards */
+.service-card {
+    background: var(--card-bg);
+    border: 1px solid rgba(0, 255, 65, 0.2);
+    border-radius: 15px;
+    padding: 20px;
+    margin-bottom: 15px;
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    border-color: var(--neon-green);
+    box-shadow: 0 10px 25px rgba(0, 255, 65, 0.1);
+}
+
+.service-card-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.service-name {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--neon-green);
+}
+
+.service-status-badge {
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 500;
+}
+
+.service-status-badge.active {
+    background: rgba(0, 255, 65, 0.2);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+}
+
+.service-status-badge.inactive {
+    background: rgba(255, 0, 64, 0.2);
+    color: #ff0040;
+    border: 1px solid #ff0040;
+}
+
+.service-details {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+    gap: 10px;
+    margin-bottom: 15px;
+}
+
+.service-detail {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 12px;
+    background: rgba(0, 255, 65, 0.05);
+    border-radius: 8px;
+}
+
+.service-detail-label {
+    font-size: 0.9rem;
+    color: var(--text-secondary);
+}
+
+.service-detail-value {
+    font-weight: 600;
+    color: var(--neon-green);
+}
+
+/* Action buttons */
+.action-buttons {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+}
+
+.btn-action {
+    padding: 8px 16px;
+    border: none;
+    border-radius: 20px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+}
+
+.btn-action.primary {
+    background: linear-gradient(45deg, var(--neon-green), var(--neon-blue));
+    color: var(--text-primary);
+}
+
+.btn-action.secondary {
+    background: rgba(0, 255, 65, 0.1);
+    color: var(--neon-green);
+    border: 1px solid var(--neon-green);
+}
+
+.btn-action.danger {
+    background: linear-gradient(45deg, #ff0040, #ff6b6b);
+    color: var(--text-primary);
+}
+
+.btn-action:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 5px 15px rgba(0, 255, 65, 0.3);
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+    .quick-stats {
+        grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .service-details {
+        grid-template-columns: 1fr;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+    }
+    
+    .btn-action {
+        justify-content: center;
+    }
+}
+
+@media (max-width: 480px) {
+    .quick-stats {
+        grid-template-columns: 1fr;
+    }
+    
+    .widget {
+        padding: 15px;
+    }
+    
+    .service-card {
+        padding: 15px;
+    }
+}
+
+/* Dark mode enhancements */
+@media (prefers-color-scheme: dark) {
+    .card {
+        background: rgba(26, 26, 26, 0.9);
+    }
+    
+    .form-control {
+        background: rgba(26, 26, 26, 0.9);
+    }
+}
+
+/* Print styles */
+@media print {
+    .btn-action,
+    .navbar,
+    .modal {
+        display: none !important;
+    }
+    
+    .card {
+        border: 1px solid #000;
+        box-shadow: none;
+    }
+} 
