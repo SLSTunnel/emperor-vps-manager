@@ -1,0 +1,430 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard - Emperor DevSupport VPS Manager{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Welcome Section -->
+    <div class="col-12 mb-4">
+        <div class="card fade-in-up">
+            <div class="card-body text-center">
+                <h2 class="card-title" style="color: var(--neon-green);">
+                    <i class="fas fa-crown"></i> Emperor DevSupport VPS Manager
+                </h2>
+                <p class="card-text text-secondary">
+                    Professional VPN Management Dashboard
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- System Statistics -->
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-chart-line"></i> System Statistics
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row" id="stats-container">
+                    <!-- Stats will be loaded here -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Quick Actions -->
+    {% if current_user.role == 'admin' %}
+    <div class="col-12 mb-4">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-bolt"></i> Quick Actions
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-neon w-100" data-bs-toggle="modal" data-bs-target="#createUserModal">
+                            <i class="fas fa-user-plus"></i> Create User
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-neon w-100" data-bs-toggle="modal" data-bs-target="#createVpnModal">
+                            <i class="fas fa-shield-alt"></i> Create VPN
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-neon w-100" data-bs-toggle="modal" data-bs-target="#createEnhancedSshModal">
+                            <i class="fas fa-terminal"></i> Create Enhanced SSH
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-neon w-100" onclick="location.href='{{ url_for('users') }}'">
+                            <i class="fas fa-users-cog"></i> Manage Users
+                        </button>
+                    </div>
+                    <div class="col-md-3 mb-3">
+                        <button class="btn btn-neon w-100" onclick="location.href='{{ url_for('services') }}'">
+                            <i class="fas fa-server"></i> Services
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+
+    <!-- Recent Activity -->
+    <div class="col-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-history"></i> Recent Activity
+                </h5>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-hover" id="activity-table">
+                        <thead>
+                            <tr>
+                                <th>Action</th>
+                                <th>User</th>
+                                <th>Details</th>
+                                <th>Timestamp</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Activity logs will be loaded here -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Create User Modal -->
+{% if current_user.role == 'admin' %}
+<div class="modal fade" id="createUserModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid rgba(0, 255, 65, 0.3);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(0, 255, 65, 0.2);">
+                <h5 class="modal-title" style="color: var(--neon-green);">
+                    <i class="fas fa-user-plus"></i> Create New User
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createUserForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="password" class="form-label">Password</label>
+                        <input type="password" class="form-control" id="password" name="password" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="email" class="form-label">Email (Optional)</label>
+                        <input type="email" class="form-control" id="email" name="email">
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(0, 255, 65, 0.2);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-neon">Create User</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Create VPN Modal -->
+<div class="modal fade" id="createVpnModal" tabindex="-1">
+    <div class="modal-dialog">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid rgba(0, 255, 65, 0.3);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(0, 255, 65, 0.2);">
+                <h5 class="modal-title" style="color: var(--neon-green);">
+                    <i class="fas fa-shield-alt"></i> Create VPN Account
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createVpnForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="vpn_username" class="form-label">Username</label>
+                        <input type="text" class="form-control" id="vpn_username" name="username" required>
+                    </div>
+                    <div class="mb-3">
+                        <label for="service_type" class="form-label">Service Type</label>
+                        <select class="form-control" id="service_type" name="service_type" required>
+                            <option value="">Select Service</option>
+                            <option value="ssh">SSH Account</option>
+                            <option value="sshws">SSHWS Account</option>
+                            <option value="v2ray">V2Ray Account</option>
+                            <option value="wireguard">WireGuard Account</option>
+                            <option value="openvpn">OpenVPN Account</option>
+                            <option value="shadowsocks">Shadowsocks Account</option>
+                            <option value="slowdns">SlowDNS Account</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(0, 255, 65, 0.2);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-neon">Create VPN</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<!-- Create Enhanced SSH Modal -->
+<div class="modal fade" id="createEnhancedSshModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content" style="background: var(--card-bg); border: 1px solid rgba(0, 255, 65, 0.3);">
+            <div class="modal-header" style="border-bottom: 1px solid rgba(0, 255, 65, 0.2);">
+                <h5 class="modal-title" style="color: var(--neon-green);">
+                    <i class="fas fa-terminal"></i> Create Enhanced SSH Account
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <form id="createEnhancedSshForm">
+                <div class="modal-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="enhanced_ssh_username" class="form-label">Username</label>
+                                <input type="text" class="form-control" id="enhanced_ssh_username" name="username" required>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="enhanced_ssh_password" class="form-label">Password (Leave empty for auto-generate)</label>
+                                <input type="password" class="form-control" id="enhanced_ssh_password" name="password">
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="expire_days" class="form-label">Expire Days</label>
+                                <input type="number" class="form-control" id="expire_days" name="expire_days" value="30" min="1" max="365" required>
+                                <small class="form-text text-muted">Account will expire after this many days</small>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="mb-3">
+                                <label for="max_connections" class="form-label">Max Connections</label>
+                                <input type="number" class="form-control" id="max_connections" name="max_connections" value="1" min="1" max="10" required>
+                                <small class="form-text text-muted">Maximum simultaneous connections allowed</small>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="alert alert-info">
+                        <h6><i class="fas fa-info-circle"></i> Enhanced SSH Features:</h6>
+                        <ul class="mb-0">
+                            <li><strong>SSH Direct:</strong> Standard SSH connection on port 22</li>
+                            <li><strong>SSH + SSL:</strong> Encrypted SSH connection</li>
+                            <li><strong>SSH + WebSocket:</strong> SSH over WebSocket on port 80</li>
+                            <li><strong>OpenVPN:</strong> Full OpenVPN access</li>
+                            <li><strong>V2Ray:</strong> VMess protocol support</li>
+                            <li><strong>WireGuard:</strong> Modern VPN protocol</li>
+                            <li><strong>Shadowsocks:</strong> SOCKS5 proxy support</li>
+                            <li><strong>BadVPN UDPGW:</strong> UDP tunneling on port 7300</li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="modal-footer" style="border-top: 1px solid rgba(0, 255, 65, 0.2);">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                    <button type="submit" class="btn btn-neon">Create Enhanced SSH Account</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endif %}
+{% endblock %}
+
+{% block scripts %}
+<script>
+// Load system statistics
+function loadStats() {
+    fetch('/api/stats')
+        .then(response => response.json())
+        .then(data => {
+            const statsContainer = document.getElementById('stats-container');
+            statsContainer.innerHTML = `
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-microchip"></i>
+                        </div>
+                        <div class="stat-value">${data.cpu_percent}%</div>
+                        <div class="stat-label">CPU Usage</div>
+                        <div class="progress mt-2">
+                            <div class="progress-bar" style="width: ${data.cpu_percent}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-memory"></i>
+                        </div>
+                        <div class="stat-value">${(data.memory_used / 1024 / 1024 / 1024).toFixed(1)}GB</div>
+                        <div class="stat-label">RAM Used (${data.memory_percent}%)</div>
+                        <div class="progress mt-2">
+                            <div class="progress-bar" style="width: ${data.memory_percent}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-hdd"></i>
+                        </div>
+                        <div class="stat-value">${(data.disk_used / 1024 / 1024 / 1024).toFixed(1)}GB</div>
+                        <div class="stat-label">Disk Used (${data.disk_percent}%)</div>
+                        <div class="progress mt-2">
+                            <div class="progress-bar" style="width: ${data.disk_percent}%"></div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3 mb-3">
+                    <div class="stat-card">
+                        <div class="stat-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <div class="stat-value">${data.active_users}</div>
+                        <div class="stat-label">Active Users</div>
+                    </div>
+                </div>
+            `;
+        })
+        .catch(error => console.error('Error loading stats:', error));
+}
+
+// Load activity logs
+function loadActivityLogs() {
+    fetch('/api/logs')
+        .then(response => response.json())
+        .then(data => {
+            const tbody = document.querySelector('#activity-table tbody');
+            tbody.innerHTML = data.logs.map(log => `
+                <tr>
+                    <td><span class="badge bg-primary">${log.action}</span></td>
+                    <td>${log.user || 'System'}</td>
+                    <td>${log.details}</td>
+                    <td>${new Date(log.timestamp).toLocaleString()}</td>
+                </tr>
+            `).join('');
+        })
+        .catch(error => console.error('Error loading logs:', error));
+}
+
+// Create user form handler
+document.getElementById('createUserForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('/create_user', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('User created successfully!');
+            document.getElementById('createUserModal').querySelector('.btn-close').click();
+            this.reset();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error creating user: ' + error);
+    });
+});
+
+// Create VPN form handler
+document.getElementById('createVpnForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('/create_vpn', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            alert('VPN account created successfully!');
+            document.getElementById('createVpnModal').querySelector('.btn-close').click();
+            this.reset();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error creating VPN account: ' + error);
+    });
+});
+
+// Create Enhanced SSH form handler
+document.getElementById('createEnhancedSshForm')?.addEventListener('submit', function(e) {
+    e.preventDefault();
+    
+    const formData = new FormData(this);
+    
+    fetch('/create_enhanced_ssh', {
+        method: 'POST',
+        body: formData
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            // Show detailed success message with account info
+            const message = `Enhanced SSH Account Created Successfully!
+
+Username: ${data.username}
+Password: ${data.password}
+Expire Date: ${data.expire_date}
+Max Connections: ${data.max_connections}
+
+This account supports:
+• SSH Direct (Port 22)
+• SSH + SSL
+• SSH + WebSocket (Port 80)
+• OpenVPN
+• V2Ray
+• WireGuard
+• Shadowsocks
+• BadVPN UDPGW (Port 7300)
+
+Account configuration has been saved to the database.`;
+            
+            alert(message);
+            document.getElementById('createEnhancedSshModal').querySelector('.btn-close').click();
+            this.reset();
+        } else {
+            alert('Error: ' + data.error);
+        }
+    })
+    .catch(error => {
+        alert('Error creating enhanced SSH account: ' + error);
+    });
+});
+
+// Auto-refresh stats every 30 seconds
+setInterval(loadStats, 30000);
+
+// Load initial data
+document.addEventListener('DOMContentLoaded', function() {
+    loadStats();
+    loadActivityLogs();
+});
+</script>
+{% endblock %} 
