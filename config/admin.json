@@ -1,0 +1,9 @@
+{
+  "username": "admin",
+  "password": "emperor2024",
+  "email": "admin@emperor.com",
+  "role": "admin",
+  "session_timeout": 3600,
+  "max_login_attempts": 5,
+  "lockout_duration": 900
+} 
